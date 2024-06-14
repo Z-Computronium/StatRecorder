@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foosball Stats Tracker</title>
+    <style>
+        .stats {
+            margin-top: 20px;
+            text-align: center;
+        }
+        body {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .player-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px;
+        }
+        input {
+            margin-bottom: 10px;
+        }
+        .button-box {
+            width: 200px;
+            height: 200px;
+            border: 1px solid #000;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 5px;
+        }
+        .button-half {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .button-half.green {
+            background-color: green;
+            color: white;
+        }
+        .button-half.red {
+            background-color: red;
+            color: white;
+        }
+        .button-half.blue {
+            background-color: blue;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="player-container">
+        <input type="text" id="player1-name" placeholder="Player 1 Name">
+        <div class="button-box">
+            <div class="button-half green" onclick="logStats('player1', 'success')">Successful Pass</div>
+            <div class="button-half red" onclick="logStats('player1', 'fail')">Failed Pass</div>
+            <div class="button-half blue" onclick="logStats('player2', 'steal')">Steal</div>
+        </div>
+        <div class="stats">
+            <h3 id="player1-stats-header">Offensive Passing</h3>
+            <p>Successful Passes: <span id="successful-passes-player1">0</span></p>
+            <p>Failed Passes: <span id="failed-passes-player1">0</span></p>
+            <p>Total Attempts: <span id="total-attempts-player1">0</span></p>
+            <h3>Defensive Stats</h3>
+            <p>Successful Defenses: <span id="successful-defenses-player2">0</span></p>
+            <p>Failed Defenses: <span id="failed-defenses-player2">0</span></p>
+            <p>Steals Allowed: <span id="steals-allowed-player1">0</span></p>
+            <p>Total Attempts: <span id="total-defenses-player1">0</span></p>
+        </div>
+    </div>
+    <div class="player-container">
+        <input type="text" id="player2-name" placeholder="Player 2 Name">
+        <div class="button-box">
+            <div class="button-half green" onclick="logStats('player2', 'success')">Successful Pass</div>
+            <div class="button-half red" onclick="logStats('player2', 'fail')">Failed Pass</div>
+            <div class="button-half blue" onclick="logStats('player1', 'steal')">Steal</div>
+        </div>
+        <div class="stats">
+            <h3 id="player2-stats-header">Offensive Passing</h3>
+            <p>Successful Passes: <span id="successful-passes-player2">0</span></p>
+            <p>Failed Passes: <span id="failed-passes-player2">0</span></p>
+            <p>Total Attempts: <span id="total-attempts-player2">0</span></p>
+            <h3>Defensive Stats</h3>
+            <p>Successful Defenses: <span id="successful-defenses-player1">0</span></p>
+            <p>Failed Defenses: <span id="failed-defenses-player1">0</span></p>
+            <p>Steals Allowed: <span id="steals-allowed-player2">0</span></p>
+            <p>Total Attempts: <span id="total-defenses-player2">0</span></p>
+        </div>
+    </div>
+
+    <script>
+        let player1Stats = {
+            successfulPasses: 0,
+            failedPasses: 0,
+            successfulDefenses: 0,
+            failedDefenses: 0,
+            stealsAllowed: 0,
+            totalAttempts: 0,
+            totalDefenses: 0
+        };
+        let player2Stats = {
+            successfulPasses: 0,
+            failedPasses: 0,
+            successfulDefenses: 0,
+            failedDefenses: 0,
+            stealsAllowed: 0,
+            totalAttempts: 0,
+            totalDefenses: 0
+        };
+
+        function logStats(player, result) {
+            if (player === 'player1') {
+                player1Stats.totalAttempts++;
+                if (result === 'success') {
+                    player1Stats.successfulPasses++;
+                    player2Stats.failedDefenses++;
+                    player2Stats.totalDefenses++;
+                } else if (result === 'fail') {
+                    player1Stats.failedPasses++;
+                    player2Stats.successfulDefenses++;
+                    player2Stats.totalDefenses++;
+                } else if (result === 'steal') {
+                    player2Stats.stealsAllowed++;
+                    player2Stats.totalDefenses++;
+                }
+                updateStats('player1');
+                updateStats('player2');
+            } else if (player === 'player2') {
+                player2Stats.totalAttempts++;
+                if (result === 'success') {
+                    player2Stats.successfulPasses++;
+                    player1Stats.failedDefenses++;
+                    player1Stats.totalDefenses++;
+                } else if (result === 'fail') {
+                    player2Stats.failedPasses++;
+                    player1Stats.successfulDefenses++;
+                    player1Stats.totalDefenses++;
+                } else if (result === 'steal') {
+                    player1Stats.stealsAllowed++;
+                    player1Stats.totalDefenses++;
+                }
+                updateStats('player2');
+                updateStats('player1');
+            }
+        }
+
+        function updateStats(player) {
+            if (player === 'player1') {
+                document.getElementById('successful-passes-player1').innerText = player1Stats.successfulPasses;
+                document.getElementById('failed-passes-player1').innerText = player1Stats.failedPasses;
+                document.getElementById('total-attempts-player1').innerText = player1Stats.totalAttempts;
+                document.getElementById('successful-defenses-player2').innerText = player1Stats.successfulDefenses;
+                document.getElementById('failed-defenses-player2').innerText = player1Stats.failedDefenses;
+                document.getElementById('steals-allowed-player1').innerText = player1Stats.stealsAllowed;
+                document.getElementById('total-defenses-player1').innerText = player1Stats.totalDefenses;
+                document.getElementById('player1-stats-header').innerText = document.getElementById('player1-name').value + ' Stats';
+            } else if (player === 'player2') {
+                document.getElementById('successful-passes-player2').innerText = player2Stats.successfulPasses;
+                document.getElementById('failed-passes-player2').innerText = player2Stats.failedPasses;
+                document.getElementById('total-attempts-player2').innerText = player2Stats.totalAttempts;
+                                        document.getElementById('successful-defenses-player1').innerText = player2Stats.successfulDefenses;
+                                        document.getElementById('failed-defenses-player1').innerText = player2Stats.failedDefenses;
+                                        document.getElementById('steals-allowed-player2').innerText = player2Stats.stealsAllowed;
+                                        document.getElementById('total-defenses-player2').innerText = player2Stats.totalDefenses;
+                                        document.getElementById('player2-stats-header').innerText = document.getElementById('player2-name').value + ' Stats';
+                                                    }
+                                                }
+                                            </script>
+                                        </body>
+                                        </html>

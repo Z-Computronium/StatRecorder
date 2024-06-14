@@ -1,0 +1,47 @@
+.stats {
+  margin-top: 20px;
+  text-align: center;
+}
+body {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 100vh;
+}
+.player-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+input {
+  margin-bottom: 10px;
+}
+.button-box {
+  width: 200px;
+  height: 200px;
+  border: 1px solid #000;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 5px;
+}
+.button-half {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+}
+.button-half.green {
+  background-color: green;
+  color: white;
+}
+.button-half.red {
+  background-color: red;
+  color: white;
+}
+.button-half.blue {
+  background-color: blue;
+  color: white;
+}
